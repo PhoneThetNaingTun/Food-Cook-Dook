@@ -1,0 +1,19 @@
+.navContainer{
+    width: 15%;
+    background-color: rgb(23,38,58);
+    text-align: center;
+    margin: auto;
+    border-radius: 0 0 10px 10px;
+    animation: popup 1.3s ease-in-out;
+    height: 90px;
+    position: relative;
+}
+
+@keyframes popup {
+    from{
+        top:-90px;
+    }
+    to{
+        top: 0;
+    }
+}

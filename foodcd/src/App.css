@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.mainContainer{
+  width: 100%;
+  height: 800px;
+  background-color: black;
+}
+.particleImg{
+  width: 100%;
+  height: 600px;
+}
