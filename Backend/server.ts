@@ -70,9 +70,23 @@ app.post("/menus", (req: Request, res: Response) => {
   const newMenu = { id, name, price };
   if (!name || !price) {
     res.send({ Message: "notok" });
+  }else{
+    allMenus.push(newMenu);
+    res.send(allMenus);
   }
-  allMenus.push(newMenu);
-  res.send({ Message: "ok" });
+
 });
+
+app.delete("/menus",(req:Request,res:Response)=>{
+  const id = Number(req.query.id)
+  const deleteMenu = allMenus.find((item)=>item.id===id);
+  if(deleteMenu){
+    const indexOfDeleteMenu = allMenus.indexOf(deleteMenu);
+     allMenus.splice(indexOfDeleteMenu,1);
+  }
+  res.send(allMenus)
+})
+
+
 
 app.listen(PORT, () => console.log(PORT));

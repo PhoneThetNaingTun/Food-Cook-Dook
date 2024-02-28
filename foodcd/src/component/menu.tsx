@@ -21,6 +21,7 @@ interface Menus {
 const Menu = () => {
   const [menus, setMenus] = useState<Menus[]>([]);
   const [open, setOpen] = useState<boolean>(false);
+  const [editOpen,setEditOpen] = useState<boolean>(false);
   const [newMenu, setNewMenu] = useState({ name: "", price: 0 });
   useEffect(() => {
     getMenus();
@@ -36,18 +37,26 @@ const Menu = () => {
   };
 
   const setNewMenus = async () => {
-    await fetch("http://localhost:5000/menus", {
+ const response= await fetch("http://localhost:5000/menus", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(newMenu),
     });
-    setOpen(false);
+    const data = await response.json();
+    if(data.message){
+
+    }else{
+      setMenus(data);
+      setOpen(false);
+    }
+
   };
   const deleteMenu = async (key: number) => {
-    await fetch("http://localhost:5000/menus", {
-      method: "DELETE",
-      body: JSON.stringify(key),
+    const response = await fetch(`http://localhost:5000/menus?id=${key}`, {
+      method: "DELETE"
     });
+    const data = await response.json()
+    setMenus(data);
   };
   return (
     <div className="menuMainContainer">
@@ -84,7 +93,7 @@ const Menu = () => {
               <Typography variant="h4">{items.name}</Typography>
               <Typography variant="h4">{items.price}</Typography>
               <Box>
-                <Button variant="contained" sx={{ margin: "5px" }}>
+                <Button variant="contained" sx={{ margin: "5px" }} onClick={()=>setEditOpen(true)}>
                   Edit
                 </Button>
                 <Button
@@ -119,10 +128,20 @@ const Menu = () => {
               }}
             ></TextField>
             <DialogActions>
-              <Button variant="contained" onClick={setNewMenus}>
+              <Button variant="contained" onClick={setNewMenus} disabled={newMenu.name&&newMenu.price ? false:true}>
                 Create
               </Button>
             </DialogActions>
+          </DialogContent>
+        </Dialog>
+        <Dialog onClose={() => setEditOpen(false)} open={editOpen}>
+          <DialogTitle>Edit Menu</DialogTitle>
+          <DialogContent sx={{display:"flex",flexDirection:"column"}}>
+            <TextField variant="outlined" type="text" label="name" sx={{ mb: "20px", mt: "20px" }}></TextField>
+            <TextField variant="outlined" type="number" label="price" sx={{ mb: "20px" }}></TextField>
+              <DialogActions>
+                <Button variant="contained">Okay</Button>
+              </DialogActions>
           </DialogContent>
         </Dialog>
       </Box>
